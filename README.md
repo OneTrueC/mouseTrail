@@ -41,4 +41,10 @@ with rainbow (set in config).
 
 The included example xpms use red as the rainbow color.
 
+Dependencies
+------------
+- libXpm development headers
+- libXfixes development headers
+- X11 development headers
+
 ###### Adapted from mouseTrail.1
