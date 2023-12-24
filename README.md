@@ -11,11 +11,11 @@ $ **mouseTrail**
 
 Info
 ----
-Cursors in the trail are xpm files and are selected
+Cursors in the trail are XPM files and are selected
 either by the name given by Xorg, or the location of
 the hotspot formatted as *xhot*-*yhot*.xpm
 
-The xpms do not include transparency by default, and
+The XPMs do not include transparency by default, and
 so one color (set by the emptyColor, in config) is
 replaced with transparency.
 
@@ -24,11 +24,12 @@ Adwaita cursor theme.
 
 Exit Status
 -----------
-| Return Code |                                   Meaning |
-| :---------- | ----------------------------------------: |
-| 0           |                                   Success |
-| 2           | Cannot find the specified initCursor file |
-| 11          |            Cannot connect to the X server |
+| Return Code |                                                Meaning |
+| :---------- | -----------------------------------------------------: |
+| 0           |                                                Success |
+| 2           |              Cannot find the specified initCursor file |
+| 9           | Invalid XPM file attempted to be opened during runtime |
+| 11          |                         Cannot connect to the X server |
 
 Customization
 -------------
@@ -39,7 +40,7 @@ under <ins>/* config */</ins> and recompiling.
 Rainbow mode works by replacing a single color in each copy
 with rainbow (set in config).
 
-The included example xpms use red as the rainbow color.
+The included example XPMs use red as the rainbow color.
 
 Dependencies
 ------------

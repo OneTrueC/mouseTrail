@@ -117,7 +117,9 @@ main()
 					sprintf(file, "%s%s.xpm", library, initCursor);
 
 				cursorName = (char*)cursor->name;
-				XpmReadFileToImage(dpy, file, &pointer, NULL, NULL);
+				if (XpmReadFileToImage(dpy, file, &pointer, NULL, NULL) ==
+				    XpmFileInvalid)
+					return 2;
 			}
 
 			if (rainbow) color = rand() % 0xFFFFFF;
