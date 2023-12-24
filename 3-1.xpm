@@ -1,0 +1,33 @@
+/* XPM */
+static char *left_ptr_png[] = {
+/* columns rows colors chars-per-pixel */
+"24 24 3 1 4 4",
+"  c None",
+". c red",
+"X c white",
+/* pixels */
+"                        ",
+"                        ",
+"                        ",
+"   X                    ",
+"   XX                   ",
+"   X.X                  ",
+"   X..X                 ",
+"   X...X                ",
+"   X....X               ",
+"   X.....X              ",
+"   X......X             ",
+"   X.......X            ",
+"   X........X           ",
+"   X.........X          ",
+"   X.....XXXXXX         ",
+"   X.....X              ",
+"   X..XX..X             ",
+"   X.X  X.X             ",
+"   XX   X..X            ",
+"   X     X.X            ",
+"         XXX            ",
+"                        ",
+"                        ",
+"                        "
+};

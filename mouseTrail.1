@@ -1,0 +1,41 @@
+.Dd December 24, 2023
+.Dt mouseTrail 1
+.Os
+.Sh NAME
+.Nm mouseTrail
+.Nd fun little mouse trail
+.Sh SYNOPSIS
+.Nm
+.Sh DESCRIPTION
+.Nm
+is a fun little program which uses the X window system
+to create a mouse trail, potentially with a rainbow effect.
+It was written to be compiled with musl libs, so may not
+work with glibc.
+.Sh EXIT STATUS
+.Nm
+has the following exit values:
+.Bl -tag
+.It 0
+Success
+.It 2
+Cannot find the specified initCursor file
+.It 11
+Cannot connect to the X server
+.Sh CUSTOMIZATION
+.Nm
+can be customized be editing the variables under
+.Ar /* config */
+near the top of the source, and recompiling.
+.Sh CURSORS
+.Nm
+cursors are stored as xpm files and are selected
+either by the name given by Xorg, or the location of
+the hotspot formatted as (xhot)-(yhot).xpm
+.Pp
+The xpms do not include transparency by default, and
+so one color (set by the emptyColor, in config) is
+replaced with transparency.
+.Sh RAINBOW MODE
+Rainbow mode works by replacing a single color in each copy
+with rainbow (set in config).
