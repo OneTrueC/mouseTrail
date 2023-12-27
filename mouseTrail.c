@@ -34,11 +34,11 @@
 int
 main()
 {
-	char *file, *cursorName;
+	char *file, cursorName[256];
 	Display *dpy;
 	GC gc;
 	int i, x, y, scr, xhot, yhot;
-	unsigned long pixel, color;
+	unsigned long j, pixel, color;
 	struct timespec ts;
 	Window root, copies[numCopies];
 	XFixesCursorImage *cursor;
@@ -102,7 +102,6 @@ main()
 			nanosleep(&ts, &ts);
 
 			XClearWindow(dpy, copies[i]);
-
 			cursor = XFixesGetCursorImage(dpy);
 
 			if (!(cursor->xhot == 0 && cursor->yhot == 0 &&
@@ -123,7 +122,8 @@ main()
 					    XpmFileInvalid)
 						return 2;
 
-					cursorName = (char*)cursor->name;
+					for (j = 0; j < strlen(cursor->name)+1; j++)
+						cursorName[j] = cursor->name[j];
 					xhot = cursor->xhot;
 					yhot = cursor->yhot;
 				}
