@@ -26,7 +26,7 @@
 
 	/* directory containing xpm files for each cursor */
 	const char* library = "~/.mouseTrail/";
-	const char* initCursor = "0-0"; /* initial cursor xpm to use */
+	const char* initCursor = "3-1"; /* initial cursor xpm to use */
 
 	const char* class = "mouseTrail"; /* class to set copy windows to */
 /* end config */
@@ -100,49 +100,53 @@ main()
 	while (1) {
 		for (i = 0; i < numCopies; i++) {
 			nanosleep(&ts, &ts);
-			cursor = XFixesGetCursorImage(dpy);
 
 			XClearWindow(dpy, copies[i]);
 
-			if (cursor->name != cursorName || strlen(cursor->name) == 0 ||
-			    cursor->xhot != xhot || cursor->yhot != yhot) {
-				XDestroyImage(pointer);
+			cursor = XFixesGetCursorImage(dpy);
 
-				sprintf(file, "%s%s.xpm", library, cursor->name);
+			if (!(cursor->xhot == 0 && cursor->yhot == 0 &&
+			    strlen(cursor->name) == 0)) {
+				if (cursor->name != cursorName || (strlen(cursor->name) == 0 &&
+				    (cursor->xhot != xhot || cursor->yhot != yhot))) {
+					XDestroyImage(pointer);
 
-				if (access(file, F_OK))
-					sprintf(file, "%s%i-%i.xpm", library, cursor->xhot,
+					sprintf(file, "%s%s.xpm", library, cursor->name);
+
+					if (access(file, F_OK))
+						sprintf(file, "%s%i-%i.xpm", library, cursor->xhot,
 					                                      cursor->yhot);
-				if (access(file, F_OK))
-					sprintf(file, "%s%s.xpm", library, initCursor);
+					if (access(file, F_OK))
+						sprintf(file, "%s%s.xpm", library, initCursor);
 
-				cursorName = (char*)cursor->name;
-				if (XpmReadFileToImage(dpy, file, &pointer, NULL, NULL) ==
-				    XpmFileInvalid)
-					return 2;
-			}
+					if (XpmReadFileToImage(dpy, file, &pointer, NULL, NULL) ==
+					    XpmFileInvalid)
+						return 2;
 
-			if (rainbow) color = rand() % 0xFFFFFF;
-
-			for (x = 0; x < pointer->width; x++)
-				for (y = 0; y < pointer->height; y++) {
-					pixel = XGetPixel(pointer, x, y);
-
-					if (pixel != emptyColor) {
-						if (pixel == replaceColor && rainbow)
-							XSetForeground(dpy, gc, color + 0xFF000000);
-						else
-							XSetForeground(dpy, gc, pixel + 0xFF000000);
-						XDrawPoint(dpy, copies[i], gc, x, y);
-					}
+					cursorName = (char*)cursor->name;
+					xhot = cursor->xhot;
+					yhot = cursor->yhot;
 				}
+				if (rainbow) color = rand() % 0xFFFFFF;
 
-			XMoveWindow(dpy, copies[i], cursor->x - cursor->xhot,
-			            cursor->y - cursor->yhot);
-			XRaiseWindow(dpy, copies[i]);
+				for (x = 0; x < pointer->width; x++)
+					for (y = 0; y < pointer->height; y++) {
+						pixel = XGetPixel(pointer, x, y);
 
+						if (pixel != emptyColor) {
+							if (pixel == replaceColor && rainbow)
+								XSetForeground(dpy, gc, color + 0xFF000000);
+							else
+								XSetForeground(dpy, gc, pixel + 0xFF000000);
+							XDrawPoint(dpy, copies[i], gc, x, y);
+						}
+					}
+				XMoveWindow(dpy, copies[i], cursor->x - cursor->xhot,
+				            cursor->y - cursor->yhot);
+				XRaiseWindow(dpy, copies[i]);
+				}
 			XFree(cursor);
-		}
+			}
 	}
 	free(file);
 	XCloseDisplay(dpy);

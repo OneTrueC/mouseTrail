@@ -22,6 +22,11 @@ replaced with transparency.
 Included are some examples, which are taken from the
 Adwaita cursor theme.
 
+If the current cursor has no name and has its hotspot at
+(0, 0), then **mouseTrail** will stop and wait until another
+cursor is used.
+
+
 Exit Status
 -----------
 | Return Code |                                                Meaning |

@@ -1,4 +1,4 @@
-.Dd December 24, 2023
+.Dd December 27, 2023
 .Dt mouseTrail 1
 .Os
 .Sh NAME
@@ -38,6 +38,11 @@ the hotspot formatted as (xhot)-(yhot).xpm
 The xpms do not include transparency by default, and
 so one color (set by the emptyColor, in config) is
 replaced with transparency.
+.Pp
+If the current cursor has no name and has its hotspot at
+(0, 0), then
+.Nm
+will stop and wait until another mouse cursor is used.
 .Sh RAINBOW MODE
 Rainbow mode works by replacing a single color in each copy
 with rainbow (set in config).
