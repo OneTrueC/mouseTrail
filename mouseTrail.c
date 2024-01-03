@@ -1,6 +1,7 @@
 /* fun little program to create a mousetrail using the X window system *\
 |*                                                                     *|
-\* writen for musl libc, so dont get mad at my function usage          */
+|* writen for musl libc, so dont get mad at my function usage          *|
+\* Copyright (C) 2024  Andrew Charles Marino                           */
 #define _POSIX_C_SOURCE 200809L
 
 #include <stdlib.h>
