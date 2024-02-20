@@ -2,8 +2,6 @@ mouseTrail
 ==========
 A fun little program which uses the X window system
 to create a mouse trail, potentially with a rainbow effect.
-It was written to be compiled with musl libs, so may not
-work with glibc.
 
 Usage
 -----
