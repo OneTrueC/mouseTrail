@@ -11,17 +11,14 @@
 is a fun little program which uses the X window system
 to create a mouse trail, potentially with a rainbow effect.
 .Sh EXIT STATUS
-.Nm
-has the following exit values:
-.Bl -tag
-.It 0
-Success
-.It 2
-Cannot find the specified initCursor file
-.It 9
-Invalid xpm file attempted to be opened during runtime
-.It 11
-Cannot connect to the X server
+.TS
+allbox;
+lb lb
+l l.
+Return Value	Meaning
+2	Cannot find the specified initCursor file
+11	Cannot connect to the X server
+.TE
 .Sh CUSTOMIZATION
 .Nm
 can be customized be editing the variables under
@@ -31,7 +28,11 @@ near the top of the source, and recompiling.
 .Nm
 cursors are stored as xpm files and are selected
 either by the name given by Xorg, or the location of
-the hotspot formatted as (xhot)-(yhot).xpm
+the hotspot formatted as
+.Ar xhot
+-
+.Ar yhot
+\&.xpm
 .Pp
 The xpms do not include transparency by default, and
 so one color (set by the emptyColor, in config) is

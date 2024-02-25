@@ -11,10 +11,10 @@ Info
 ----
 Cursors in the trail are XPM files and are selected
 either by the name given by Xorg, or the location of
-the hotspot formatted as *xhot*-*yhot*.xpm
+the hotspot formatted as `xhot`-`yhot`.xpm
 
 The XPMs do not include transparency by default, and
-so one color (set by the emptyColor, in config) is
+so one color (set by the `emptyColor`, in config) is
 replaced with transparency.
 
 Included are some examples, which are taken from the
@@ -24,14 +24,11 @@ If the current cursor has no name and has its hotspot at
 (0, 0), then **mouseTrail** will stop and wait until another
 cursor is used.
 
-
 Exit Status
 -----------
 | Return Code |                                                Meaning |
 | :---------- | -----------------------------------------------------: |
-| 0           |                                                Success |
 | 2           |              Cannot find the specified initCursor file |
-| 9           | Invalid XPM file attempted to be opened during runtime |
 | 11          |                         Cannot connect to the X server |
 
 Customization
