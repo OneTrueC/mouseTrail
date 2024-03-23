@@ -4,7 +4,7 @@ X11LIB = /usr/X11R6/lib
 INC = -I. -I/usr/include -I$(X11INC)
 LIB = -L$(X11LIB) -lX11 -lXfixes -lXpm
 
-CFLAGS = -Wall -Wextra -std=c99 -pedantic $(INC)
+CFLAGS = -Wall -Wextra -std=c99 -pedantic -O3 $(INC)
 LDFLAGS = -s $(LIB)
 
 SOURCE = mouseTrail.c
