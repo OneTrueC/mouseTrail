@@ -1,4 +1,4 @@
-/* fun little program to create a mousetrail using the X window system *\
+/* fun little program to create a mousetrail using the X window system    *\
 |* Copyright (C) 2024 Andrew Charles Marino                               *|
 |*                                                                        *|
 |* This program is free software: you can redistribute it and/or modify   *|
@@ -17,76 +17,72 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+
 #include <string.h>
 #include <time.h>
 #include <unistd.h>
+
 #include <X11/Xlib.h>
-#include <X11/xpm.h>
 #include <X11/extensions/shape.h>
 #include <X11/extensions/Xfixes.h>
 
 /* config */
-	const int numCopies = 8; /* number of copies in the trail */
-	const int copyTiming = 30; /* amount of time between clones in miliseconds */
+	/* number of copies in the trail */
+	const int numCopies = 8;
+	/* amount of time between clones in miliseconds */
+	const int copyTiming = 30;
 
-	const int rainbow = 1; /* whether or not rainbow mode is enabled */
-	/* which color to replace with rainbow */
-	const long unsigned replaceColor = 0xFF0000;
-	const long unsigned emptyColor = 0x000000; /* the color to make transparent */
+	/* whether or not rainbow mode is enabled */
+	const int rainbow = 0;
+	/* rainbowify either all (0), only lighter (1), or only darker (2) pixels */
+	const int rainSection = 0;
 
-	/* directory containing xpm files for each cursor, must end in slash */
-	const char* library = "/home/drew/Documents/mouseTrail/";
-
-	/* initial cursor xpm to use, not including .xpm,
-	 * program assumes that the length is less than 252 bytes */
-	const char* initCursor = "3-1";
-
-	const char* class = "mouseTrail"; /* class to set copy windows to */
+	/* class to set copy windows to */
+	const char* class = "mouseTrail";
 /* end config */
+
+#define red(color) (color & 0xFF)
+#define green(color) (color & 0xFF00 >> 8)
+#define blue(color) (color & 0xFF0000 >> 16)
+#define alpha(color) (color & 0xFF000000)
+#define bright(color) ((red(color) * 0.21) + (green(color) * 0.72)       \
+                       + (blue(color) * 0.07))
 
 int
 main()
 {
-	char *file, cursorName[256];
 	Display *dpy;
 	GC gc;
-	int i, x, y, scr, xhot, yhot;
-	unsigned long j, pixel, color;
+	int i, x, y, scr;
 	struct timespec ts;
+	unsigned long pixel, color;
 	Window root, copies[numCopies];
-	XFixesCursorImage *cursor;
-	XImage *image;
+	XFixesCursorImage* cursor;
 	XRectangle rect;
 	XserverRegion region;
 	XSetWindowAttributes wa;
 	XVisualInfo vinfo;
 
-	if (!(dpy = XOpenDisplay(NULL)))
+	if ((dpy = XOpenDisplay(NULL)) == NULL)
 		return 11;
+
 	scr = DefaultScreen(dpy);
 	root = RootWindow(dpy, scr);
 	XMatchVisualInfo(dpy, scr, 32, TrueColor, &vinfo);
 
-	file = malloc(sizeof(char) * (256 + strlen(library)));
-	xhot = yhot = 0;
-	snprintf(file, 256, "%s%s.xpm", library, initCursor);
-
 	ts.tv_sec = copyTiming / 1000;
 	ts.tv_nsec = (copyTiming % 1000) * 1000000;
 
-	if (access(file, F_OK)) {
-		free(file);
-		return 2;
-	}
-	XpmReadFileToImage(dpy, file, &image, NULL, NULL);
+	cursor = XFixesGetCursorImage(dpy);
 
 	for (i = 0; i < numCopies; i++) {
 		wa.override_redirect = 1;
 		wa.colormap = XCreateColormap(dpy, root, vinfo.visual, AllocNone);
 		wa.background_pixel = 0;
+		wa.border_pixel = 0;
 
-		copies[i] = XCreateWindow(dpy, root, 0, 0, image->width,
-		                        image->height, 0, vinfo.depth,
+		copies[i] = XCreateWindow(dpy, root, 0, 0, cursor->width,
+		                        cursor->height, 0, vinfo.depth,
 		                        InputOutput, vinfo.visual,
 		                        CWOverrideRedirect | CWColormap | CWBackPixel |
 		                        CWBorderPixel, &wa);
@@ -103,6 +99,8 @@ main()
 		XFlush(dpy);
 	}
 
+	XFree(cursor);
+
 	gc = XCreateGC(dpy, copies[0], 0, NULL);
 
 	while (1) {
@@ -110,61 +108,47 @@ main()
 			nanosleep(&ts, &ts);
 
 			XClearWindow(dpy, copies[i]);
+
 			cursor = XFixesGetCursorImage(dpy);
 
-			if (cursor->width == 1 && cursor->height == 1) { /* hidden cursor */
-				XFree(cursor);
-				continue;
-			}
-
-			if (cursor->name != cursorName
-			|| (strlen(cursor->name) == 0 &&
-			   (cursor->xhot != xhot || cursor->yhot != yhot))) {
-
-				XDestroyImage(image);
-
-				snprintf(file, 256, "%s%s.xpm", library, cursor->name);
-
-				if (access(file, F_OK))
-					snprintf(file, 256, "%s%i-%i.xpm", library, cursor->xhot,
-					                                      cursor->yhot);
-				if (access(file, F_OK))
-					snprintf(file, 256, "%s%s.xpm", library, initCursor);
-
-				if (access(file, F_OK))
-					return 9;
-
-				XpmReadFileToImage(dpy, file, &image, NULL, NULL);
-
-				for (j = 0; j < strlen(cursor->name)+1; j++)
-					cursorName[j] = cursor->name[j];
-				xhot = cursor->xhot;
-				yhot = cursor->yhot;
-			}
-
-			if (rainbow) color = rand() % 0xFFFFFF;
-
-			for (x = 0; x < image->width; x++)
-				for (y = 0; y < image->height; y++) {
-					pixel = XGetPixel(image, x, y);
-
-					if (pixel != emptyColor) {
-						if (pixel == replaceColor && rainbow)
-							XSetForeground(dpy, gc, color + 0xFF000000);
-						else
-							XSetForeground(dpy, gc, pixel + 0xFF000000);
-						XDrawPoint(dpy, copies[i], gc, x, y);
-					}
-				}
+			XResizeWindow(dpy, copies[i], cursor->width, cursor->height);
 			XMoveWindow(dpy, copies[i], cursor->x - cursor->xhot,
 			            cursor->y - cursor->yhot);
 			XRaiseWindow(dpy, copies[i]);
 
+			if (rainbow) color = rand() % 0xFFFFFF;
+
+			for (x = 0; x < cursor->width; x++)
+				for (y = 0; y < cursor->height; y++) {
+					pixel = cursor->pixels[x + (y * cursor->width)];
+
+					if (pixel != 0) {
+						if (rainbow) {
+							if (rainSection) {
+								if (rainSection == 1)
+									pixel &= color + 0xFF000000;
+								else
+									if (alpha(pixel) > 0xAA000000 &&
+										bright(pixel) <= bright(color))
+										pixel = color + (alpha(pixel));
+							} else
+								if (alpha(pixel) > 0xAA000000)
+									pixel = color + 0xFF000000;
+								else
+									pixel = 0;
+						}
+
+						XSetForeground(dpy, gc, pixel);
+						XDrawPoint(dpy, copies[i], gc, x, y);
+					}
+				}
+
 			XFree(cursor);
 		}
 	}
-	free(file);
+
 	XCloseDisplay(dpy);
+	XFreeGC(dpy, gc);
 
 	return 0;
 }

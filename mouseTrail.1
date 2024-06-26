@@ -1,4 +1,4 @@
-.Dd December 27, 2023
+.Dd June 26, 2024
 .Dt mouseTrail 1
 .Os
 .Sh NAME
@@ -9,14 +9,13 @@
 .Sh DESCRIPTION
 .Nm
 is a fun little program which uses the X window system
-to create a mouse trail, potentially with a rainbow effect.
+to create a mouse trail, optionally with a rainbow effect.
 .Sh EXIT STATUS
 .TS
 allbox;
 lb lb
 l l.
 Return Value	Meaning
-2	Cannot find the specified initCursor file
 11	Cannot connect to the X server
 .TE
 .Sh CUSTOMIZATION
@@ -24,24 +23,10 @@ Return Value	Meaning
 can be customized be editing the variables under
 .Ar /* config */
 near the top of the source, and recompiling.
-.Sh CURSORS
-.Nm
-cursors are stored as xpm files and are selected
-either by the name given by Xorg, or the location of
-the hotspot formatted as
-.Ar xhot
--
-.Ar yhot
-\&.xpm
 .Pp
-The xpms do not include transparency by default, and
-so one color (set by the emptyColor, in config) is
-replaced with transparency.
-.Pp
-If the current cursor has no name and has its hotspot at
-(0, 0), then
-.Nm
-will stop and wait until another mouse cursor is used.
+The behavior of rainbow mode is contained between lines
+126 and 138.
 .Sh RAINBOW MODE
-Rainbow mode works by replacing a single color in each copy
-with rainbow (set in config).
+Rainbow mode works by replacing either the all, only lighter,
+or only darker (set in config) pixels with a random color in
+each copy with rainbow.
