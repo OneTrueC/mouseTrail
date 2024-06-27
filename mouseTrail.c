@@ -128,9 +128,8 @@ main()
 								if (rainSection == 1)
 									pixel &= color + 0xFF000000;
 								else
-									if (alpha(pixel) > 0xAA000000 &&
-										bright(pixel) <= bright(color))
-										pixel = color + (alpha(pixel));
+									if (alpha(pixel) > 0xAA000000)
+										pixel |= color;
 							} else
 								if (alpha(pixel) > 0xAA000000)
 									pixel = color + 0xFF000000;
