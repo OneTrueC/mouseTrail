@@ -35,7 +35,7 @@
 	/* whether or not rainbow mode is enabled */
 	const int rainbow = 0;
 	/* rainbowify either all (0), only lighter (1), or only darker (2) pixels */
-	const int rainSection = 0;
+	const int rainType = 0;
 
 	/* class to set copy windows to */
 	const char* class = "mouseTrail";
@@ -82,10 +82,9 @@ main()
 		wa.border_pixel = 0;
 
 		copies[i] = XCreateWindow(dpy, root, 0, 0, cursor->width,
-		                        cursor->height, 0, vinfo.depth,
-		                        InputOutput, vinfo.visual,
-		                        CWOverrideRedirect | CWColormap | CWBackPixel |
-		                        CWBorderPixel, &wa);
+		                        cursor->height, 0, vinfo.depth, InputOutput,
+		                        vinfo.visual, CWOverrideRedirect | CWColormap |
+		                        CWBackPixel | CWBorderPixel, &wa);
 
 		region = XFixesCreateRegion(dpy, &rect, 1);
 		XFixesSetWindowShapeRegion(dpy, copies[i], ShapeInput, 0, 0, region);
@@ -111,6 +110,9 @@ main()
 
 			cursor = XFixesGetCursorImage(dpy);
 
+			if (cursor->height == 1 && cursor->width == 1)
+				continue;
+
 			XResizeWindow(dpy, copies[i], cursor->width, cursor->height);
 			XMoveWindow(dpy, copies[i], cursor->x - cursor->xhot,
 			            cursor->y - cursor->yhot);
@@ -124,17 +126,15 @@ main()
 
 					if (pixel != 0) {
 						if (rainbow) {
-							if (rainSection) {
-								if (rainSection == 1)
+							if (rainType) {
+								if (rainType == 1)
 									pixel &= color + 0xFF000000;
 								else
 									if (alpha(pixel) > 0xAA000000)
 										pixel |= color;
 							} else
 								if (alpha(pixel) > 0xAA000000)
-									pixel = color + 0xFF000000;
-								else
-									pixel = 0;
+									pixel = color + alpha(pixel);
 						}
 
 						XSetForeground(dpy, gc, pixel);
