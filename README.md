@@ -26,7 +26,7 @@ Customization
 under <ins>/* config */</ins> and recompiling.
 
 The behavior of rainbow mode is contained between lines
-128 and 138.
+123 and 133.
 
 ### Rainbow Mode
 Rainbow mode works by replacing either the all, only lighter,

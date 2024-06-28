@@ -41,12 +41,7 @@
 	const char* class = "mouseTrail";
 /* end config */
 
-#define red(color) (color & 0xFF)
-#define green(color) (color & 0xFF00 >> 8)
-#define blue(color) (color & 0xFF0000 >> 16)
 #define alpha(color) (color & 0xFF000000)
-#define bright(color) ((red(color) * 0.21) + (green(color) * 0.72)       \
-                       + (blue(color) * 0.07))
 
 int
 main()
