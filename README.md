@@ -29,8 +29,8 @@ The behavior of rainbow mode is contained between lines
 123 and 133.
 
 ### Rainbow Mode
-Rainbow mode works by replacing either the all, only lighter,
-or only darker (set in config) pixels with a random color in
+Rainbow mode works by replacing either all, only lighter, or
+only darker (set in config) pixels with a random color in
 each copy with rainbow.
 
 Dependencies

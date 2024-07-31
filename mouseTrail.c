@@ -37,8 +37,8 @@
 	/* rainbowify either all (0), only lighter (1), or only darker (2) pixels */
 	const int rainType = 0;
 
-	/* class to set copy windows to */
-	const char* class = "mouseTrail";
+	/* name of the copy windows */
+	const char* name = "mouseTrail";
 /* end config */
 
 #define alpha(color) (color & 0xFF000000)
@@ -87,7 +87,7 @@ main()
 
 		XChangeProperty(dpy, copies[i], XInternAtom(dpy, "_NET_WM_NAME", 0),
 		                XInternAtom(dpy, "UTF8_STRING", 0), 8, PropModeReplace,
-		                (unsigned char*)class, strlen(class));
+		                (unsigned char*)name, strlen(name));
 
 		XMapWindow(dpy, copies[i]);
 		XFlush(dpy);
