@@ -105,8 +105,10 @@ main()
 
 			cursor = XFixesGetCursorImage(dpy);
 
-			if (cursor->height == 1 && cursor->width == 1)
+			if (cursor->height == 1 && cursor->width == 1) {
+				XFree(cursor);
 				continue;
+			}
 
 			XResizeWindow(dpy, copies[i], cursor->width, cursor->height);
 			XMoveWindow(dpy, copies[i], cursor->x - cursor->xhot,
@@ -141,8 +143,11 @@ main()
 		}
 	}
 
-	XCloseDisplay(dpy);
+	for (i = 0; i < numCopies; i++)
+		XDestroyWindow(dpy, copies[i]);
+
 	XFreeGC(dpy, gc);
+	XCloseDisplay(dpy);
 
 	return 0;
 }
