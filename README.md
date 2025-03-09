@@ -1,41 +1,34 @@
-mouseTrail
-==========
-A fun little program which uses the X window system
+# NAME
+
+**mousetrail** - fun little mouse trail
+
+# SYNOPSIS
+
+**mousetrail**
+
+# DESCRIPTION
+
+**mousetrail** is a fun little program which uses the X window system
 to create a mouse trail, optionally with a rainbow effect.
 
-Usage
------
-$ **mouseTrail**
+# EXIT STATUS
 
-Info
-----
-**mouseTrail** takes the current mouse cursor and creates
-`numCopies` copies that follow the cursor by moving the
-last in the trail to the current mouse position every
-`copyTiming` milliseconds.
+| Return Code |                        Meaning |
+| :---------- | -----------------------------: |
+| 1           | Cannot connect to the X server |
 
-Exit Status
------------
-| Return Code |                                                Meaning |
-| :---------- | -----------------------------------------------------: |
-| 11          |                         Cannot connect to the X server |
+# CUSTOMIZATION
 
-Customization
--------------
-**mouseTrail** can be customized by editing the variables
-under <ins>/* config */</ins> and recompiling.
+**mousetrail** can be customized be editing the variables under
+*/\* config  \*/* near the top of the source, and recompiling. The
+behavior of rainbow mode is contained between lines 127 and 141.
 
-The behavior of rainbow mode is contained between lines
-123 and 133.
+# RAINBOW MODE
 
-### Rainbow Mode
-Rainbow mode works by replacing either all, only lighter, or
-only darker (set in config) pixels with a random color in
-each copy with rainbow.
+Rainbow mode works by replacing either all, only lighter, or only darker
+(set in config) pixels with a random color in each copy with rainbow.
 
-Dependencies
-------------
+# DEPENDENCIES
+
 - libXfixes development headers
 - X11 development headers
-
-###### Adapted from mouseTrail.1

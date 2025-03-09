@@ -1,5 +1,5 @@
 /* fun little program to create a mousetrail using the X window system    *\
-|* Copyright (C) 2024 Andrew Charles Marino                               *|
+|* Copyright (C) 2025 Andrew Charles Marino                               *|
 |*                                                                        *|
 |* This program is free software: you can redistribute it and/or modify   *|
 |* it under the terms of the GNU General Public License as published by   *|
@@ -38,13 +38,15 @@
 	const int rainType = 0;
 
 	/* name of the copy windows */
-	const char* name = "mouseTrail";
+	const char* name = "mousetrail";
 /* end config */
+
+const char* shortopts = "v";
 
 #define alpha(color) (color & 0xFF000000)
 
 int
-main()
+main(void)
 {
 	Display *dpy;
 	GC gc;
@@ -59,7 +61,7 @@ main()
 	XVisualInfo vinfo;
 
 	if ((dpy = XOpenDisplay(NULL)) == NULL)
-		return 11;
+		return 1;
 
 	scr = DefaultScreen(dpy);
 	root = RootWindow(dpy, scr);
@@ -123,15 +125,19 @@ main()
 
 					if (pixel != 0) {
 						if (rainbow) {
-							if (rainType) {
-								if (rainType == 1)
-									pixel &= color + 0xFF000000;
-								else
-									if (alpha(pixel) > 0xAA000000)
-										pixel |= color;
-							} else
+							switch (rainType) {
+							case 0: /* all pixels */
 								if (alpha(pixel) > 0xAA000000)
 									pixel = color + alpha(pixel);
+								break;
+							case 1: /* only light */
+								pixel &= color + 0xFF000000;
+								break;
+							case 2: /* only dark */
+								if (alpha(pixel) > 0xAA000000)
+									pixel |= color;
+								break;
+							}
 						}
 
 						XSetForeground(dpy, gc, pixel);

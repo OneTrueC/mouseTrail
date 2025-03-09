@@ -1,0 +1,28 @@
+.TH mousetrail 1 "2025-03-09" "VERSION" "fun little mouse trail"
+.SH NAME
+\fBmousetrail\fR \- fun little mouse trail
+.SH SYNOPSIS
+\fBmousetrail\fR
+.SH DESCRIPTION
+\fBmousetrail\fR is a fun little program which uses the X
+window system to create a mouse trail, optionally with a
+rainbow effect.
+.SH EXIT STATUS
+.TS
+allbox;
+lb lb
+l l.
+Return Value	Meaning
+1	Cannot connect to the X server
+.TE
+.SH CUSTOMIZATION
+\fBmousetrail\fR can be customized be editing the variables
+under \fI/* config  */\fR near the top of the source, and
+recompiling.
+.BR
+The behavior of rainbow mode is contained between lines
+127 and 141.
+.SH RAINBOW MODE
+Rainbow mode works by replacing either all, only lighter, or
+only darker (set in config) pixels with a random color in
+each copy with rainbow.
