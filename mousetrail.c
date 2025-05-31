@@ -101,7 +101,7 @@ main(void)
 
 	while (1) {
 		for (i = 0; i < numCopies; i++) {
-			nanosleep(&ts, &ts);
+			nanosleep(&ts, NULL);
 
 			XClearWindow(dpy, copies[i]);
 
